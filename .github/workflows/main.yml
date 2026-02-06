@@ -19,6 +19,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
+      - name: Create dummy .env file for CI
+        run: |
+          touch .env
+
       - name: Validate docker-compose.yml
         env:
           DB_PASSWORD: dummy
@@ -33,6 +37,7 @@ jobs:
           STORAGE_AZURE_ACCOUNT_KEY: dummy
           STORAGE_AZURE_ENDPOINT: https://dummy.blob.core.windows.net
         run: docker-compose -f docker-compose.yml config
+
 
 
   health_check:
