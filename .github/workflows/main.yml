@@ -7,35 +7,32 @@ on:
   workflow_dispatch:
 
 jobs:
-
   validate_config:
-  name: Validate Docker Compose Configuration
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+    name: Validate Docker Compose Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Install Docker Compose
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
-    - name: Validate docker-compose.yml
-      env:
-        DB_PASSWORD: dummy
-        KEY: dummy
-        SECRET: dummy
-        ADMIN_EMAIL: dummy@example.com
-        ADMIN_PASSWORD: dummy
-        STORAGE_LOCATIONS: azure
-        STORAGE_AZURE_DRIVER: azure
-        STORAGE_AZURE_CONTAINER: dummy
-        STORAGE_AZURE_ACCOUNT_NAME: dummy
-        STORAGE_AZURE_ACCOUNT_KEY: dummy
-        STORAGE_AZURE_ENDPOINT: https://dummy.blob.core.windows.net
-      run: docker-compose -f directus/docker-compose.yml config
-
-
+      - name: Validate docker-compose.yml
+        env:
+          DB_PASSWORD: dummy
+          KEY: dummy
+          SECRET: dummy
+          ADMIN_EMAIL: dummy@example.com
+          ADMIN_PASSWORD: dummy
+          STORAGE_LOCATIONS: azure
+          STORAGE_AZURE_DRIVER: azure
+          STORAGE_AZURE_CONTAINER: dummy
+          STORAGE_AZURE_ACCOUNT_NAME: dummy
+          STORAGE_AZURE_ACCOUNT_KEY: dummy
+          STORAGE_AZURE_ENDPOINT: https://dummy.blob.core.windows.net
+        run: docker-compose -f directus/docker-compose.yml config
 
   health_check:
     name: Health Check Directus Deployment
@@ -45,7 +42,6 @@ jobs:
       - name: Check Directus HTTP response
         run: |
           curl -I http://52.162.90.11:8055
-
 
   capture_homepage:
     name: Capture Directus Homepage
@@ -61,7 +57,6 @@ jobs:
         with:
           name: directus-homepage
           path: directus_homepage.html
-
 
   generate_report:
     name: Generate Deployment Report
