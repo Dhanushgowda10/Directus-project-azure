@@ -19,26 +19,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Create dummy .env file for CI
-        run: |
-          touch .env
-
       - name: Validate docker-compose.yml
         env:
-          DB_PASSWORD: dummy
-          KEY: dummy
-          SECRET: dummy
-          ADMIN_EMAIL: dummy@example.com
-          ADMIN_PASSWORD: dummy
-          STORAGE_LOCATIONS: azure
-          STORAGE_AZURE_DRIVER: azure
-          STORAGE_AZURE_CONTAINER: dummy
-          STORAGE_AZURE_ACCOUNT_NAME: dummy
-          STORAGE_AZURE_ACCOUNT_KEY: dummy
-          STORAGE_AZURE_ENDPOINT: https://dummy.blob.core.windows.net
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          KEY: ${{ secrets.KEY }}
+          SECRET: ${{ secrets.SECRET }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          STORAGE_LOCATIONS: ${{ secrets.STORAGE_LOCATIONS }}
+          STORAGE_AZURE_DRIVER: ${{ secrets.STORAGE_AZURE_DRIVER }}
+          STORAGE_AZURE_CONTAINER: ${{ secrets.STORAGE_AZURE_CONTAINER }}
+          STORAGE_AZURE_ACCOUNT_NAME: ${{ secrets.STORAGE_AZURE_ACCOUNT_NAME }}
+          STORAGE_AZURE_ACCOUNT_KEY: ${{ secrets.STORAGE_AZURE_ACCOUNT_KEY }}
+          STORAGE_AZURE_ENDPOINT: ${{ secrets.STORAGE_AZURE_ENDPOINT }}
         run: docker-compose -f docker-compose.yml config
-
-
 
   health_check:
     name: Health Check Directus Deployment
