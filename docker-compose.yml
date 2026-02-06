@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: Check Directus HTTP response
         run: |
-          curl -I http://YOUR_VM_PUBLIC_IP:8055
+          curl -I http://52.162.90.11:8055
 
 
   capture_homepage:
@@ -41,7 +41,7 @@ jobs:
     steps:
       - name: Download homepage HTML
         run: |
-          curl http://YOUR_VM_PUBLIC_IP:8055 -o directus_homepage.html
+          curl -L http://52.162.90.11:8055 -o directus_homepage.html
 
       - name: Upload homepage artifact
         uses: actions/upload-artifact@v4
