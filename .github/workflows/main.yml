@@ -32,7 +32,8 @@ jobs:
           STORAGE_AZURE_ACCOUNT_NAME: dummy
           STORAGE_AZURE_ACCOUNT_KEY: dummy
           STORAGE_AZURE_ENDPOINT: https://dummy.blob.core.windows.net
-        run: docker-compose -f directus/docker-compose.yml config
+        run: docker-compose -f docker-compose.yml config
+
 
   health_check:
     name: Health Check Directus Deployment
