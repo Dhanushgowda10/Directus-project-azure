@@ -1,0 +1,75 @@
+name: Directus Deployment Validation
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+
+  validate_config:
+    name: Validate Docker Compose Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Validate docker-compose.yml
+        run: docker-compose config
+
+
+  health_check:
+    name: Health Check Directus Deployment
+    runs-on: ubuntu-latest
+    needs: validate_config
+    steps:
+      - name: Check Directus HTTP response
+        run: |
+          curl -I http://52.162.90.11:8055
+
+
+  capture_homepage:
+    name: Capture Directus Homepage
+    runs-on: ubuntu-latest
+    needs: health_check
+    steps:
+      - name: Download homepage HTML
+        run: |
+          curl -L http://52.162.90.11:8055 -o directus_homepage.html
+
+      - name: Upload homepage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: directus-homepage
+          path: directus_homepage.html
+
+
+  generate_report:
+    name: Generate Deployment Report
+    runs-on: ubuntu-latest
+    needs: capture_homepage
+    steps:
+      - name: Create deployment report
+        run: |
+          echo "# Directus Deployment Report" > deployment_report.md
+          echo "" >> deployment_report.md
+          echo "## Validation" >> deployment_report.md
+          echo "- docker-compose.yml syntax validated successfully." >> deployment_report.md
+          echo "" >> deployment_report.md
+          echo "## Health Check" >> deployment_report.md
+          echo "- Directus responded successfully via HTTP." >> deployment_report.md
+          echo "" >> deployment_report.md
+          echo "## Homepage Capture" >> deployment_report.md
+          echo "- Homepage HTML downloaded successfully." >> deployment_report.md
+
+      - name: Upload deployment report
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-report
+          path: deployment_report.md
