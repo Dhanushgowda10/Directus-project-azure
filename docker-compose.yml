@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: directus
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ./database:/var/lib/postgresql/data
 
   directus:
     image: directus/directus:latest
@@ -18,18 +18,32 @@ services:
     restart: always
     ports:
       - "8055:8055"
-    env_file:
-      - .env
     environment:
+      # Directus security
+      KEY: ${KEY}
+      SECRET: ${SECRET}
+
+      # Admin user
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+
+      # Database
       DB_CLIENT: pg
       DB_HOST: database
       DB_PORT: 5432
       DB_DATABASE: directus
       DB_USER: directus
       DB_PASSWORD: ${DB_PASSWORD}
+
+      # Azure Blob Storage
+      STORAGE_LOCATIONS: ${STORAGE_LOCATIONS}
+      STORAGE_AZURE_DRIVER: ${STORAGE_AZURE_DRIVER}
+      STORAGE_AZURE_CONTAINER: ${STORAGE_AZURE_CONTAINER}
+      STORAGE_AZURE_ACCOUNT_NAME: ${STORAGE_AZURE_ACCOUNT_NAME}
+      STORAGE_AZURE_ACCOUNT_KEY: ${STORAGE_AZURE_ACCOUNT_KEY}
+      STORAGE_AZURE_ENDPOINT: ${STORAGE_AZURE_ENDPOINT}
+
       WEBSOCKETS_ENABLED: "true"
+
     depends_on:
       - database
-
-volumes:
-  pgdata:
